@@ -1,4 +1,4 @@
-{
-    type: 'ADD_MOVIES',
-    movies: []
-}
+// {
+//     type: 'ADD_MOVIE',
+//     movies: []
+// }
