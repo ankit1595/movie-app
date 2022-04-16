@@ -3,7 +3,7 @@ import React from "react";
 import { data } from "../data";
 import Navbar from "./Navbar";
 import MovieCard from "./MovieCard";
-import { addMovies } from "../actions/index";
+import { addMovies, setShowFavourite } from "../actions/index";
 
 class App extends React.Component {
   componentDidMount() {
@@ -30,34 +30,35 @@ class App extends React.Component {
     return false;
   };
 
-  // handleFavouriteTab = () => {
-  //   const { favourite } = this.props.store.getState();
-
-  //   <div className="list">
-  //     {favourite.map((movie, index) => (
-  //       <MovieCard
-  //         movie={movie}
-  //         key={`movie-${index}`}
-  //         dispatch={this.props.store.dispatch}
-  //         isMovieFavourite={this.isMovieFavourite(movie)}
-  //       />
-  //     ))}
-  //   </div>;
-  // };
+  onChangeTab = (val) => {
+    this.props.store.dispatch(setShowFavourite(val));
+  };
 
   render() {
-    const { list } = this.props.store.getState(); // {list:[], favourites:[]}
+    const { list, favourite, showFavourite } = this.props.store.getState(); // {list:[], favourites:[]}
     console.log("RENDER", this.props.store.getState());
+
+    const displayMovies = showFavourite ? favourite : list;
     return (
       <div>
         <Navbar />
         <div className="main">
           <div className="tabs">
-            <div className="tab">Movies</div>
-            <div className="tab">Favourites</div>
+            <div
+              className={`tab ${showFavourite ? "" : "active-tabs"}`}
+              onClick={() => this.onChangeTab(false)}
+            >
+              Movies
+            </div>
+            <div
+              className={`tab ${showFavourite ? "active-tabs" : ""}`}
+              onClick={() => this.onChangeTab(true)}
+            >
+              Favourites
+            </div>
           </div>
           <div className="list">
-            {list.map((movie, index) => (
+            {displayMovies.map((movie, index) => (
               <MovieCard
                 movie={movie}
                 key={`movie-${index}`}
@@ -65,6 +66,11 @@ class App extends React.Component {
                 isMovieFavourite={this.isMovieFavourite(movie)}
               />
             ))}
+            <div>
+              {displayMovies.length === 0 ? (
+                <div className="no-movies">No movies to display!</div>
+              ) : null}
+            </div>
           </div>
         </div>
       </div>
