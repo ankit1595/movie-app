@@ -35,14 +35,14 @@ class App extends React.Component {
   };
 
   render() {
-    const { movies } = this.props.store.getState(); //{movies:{}, search:{}}
+    const { movies, search } = this.props.store.getState(); //{movies:{}, search:{}}
     const { list, favourite, showFavourite } = movies; // {list:[], favourites:[],showFavourite}
     console.log("RENDER", this.props.store.getState());
 
     const displayMovies = showFavourite ? favourite : list;
     return (
       <div>
-        <Navbar dispatch={this.props.store.dispatch} />
+        <Navbar dispatch={this.props.store.dispatch} search={search} />
         <div className="main">
           <div className="tabs">
             <div
